@@ -1,0 +1,268 @@
+
+                       ASSIGNMENT  DAY 2 (25/06/2024 - TUESDAY)
+
+1.  ==>mysql>  select department_id,sum(salary) as total_salary from employee group by department_id order by department_id;
++---------------+--------------+
+| department_id | total_salary |
++---------------+--------------+
+|            20 |        41000 |
+|            30 |        30800 |
+|            40 |        16900 |
+|            50 |        34100 |
+|            60 |        22400 |
+|            70 |         2900 |
+|            80 |         8900 |
+|            90 |         2400 |
+|           100 |        12000 |
+|           110 |         2800 |
+|           130 |         2500 |
+|           140 |         6900 |
+|           150 |         7800 |
+|           160 |         7700 |
+|           170 |        17200 |
++---------------+--------------+
+15 rows in set (0.00 sec)
+
+
+2.  ==>mysql> select department_id,sum(salary) as total_salary from employee group by department_id order by total_salary desc;
++---------------+--------------+
+| department_id | total_salary |
++---------------+--------------+
+|            20 |        41000 |
+|            50 |        34100 |
+|            30 |        30800 |
+|            60 |        22400 |
+|           170 |        17200 |
+|            40 |        16900 |
+|           100 |        12000 |
+|            80 |         8900 |
+|           150 |         7800 |
+|           160 |         7700 |
+|           140 |         6900 |
+|            70 |         2900 |
+|           110 |         2800 |
+|           130 |         2500 |
+|            90 |         2400 |
++---------------+--------------+
+15 rows in set (0.00 sec)
+
+
+3.  ==>mysql> select max(salary)as max_salary ,department_id from employee group by department_id order by max_salary;
++------------+---------------+
+| max_salary | department_id |
++------------+---------------+
+|       2400 |            90 |
+|       2500 |           130 |
+|       2800 |           110 |
+|       2900 |            70 |
+|       5800 |            80 |
+|       6900 |           140 |
+|       7700 |           160 |
+|       7800 |           150 |
+|       7900 |            40 |
+|       8200 |            50 |
+|       9000 |            60 |
+|       9000 |           170 |
+|      12000 |           100 |
+|      17000 |            30 |
+|      24000 |            20 |
++------------+---------------+
+15 rows in set (0.00 sec)
+
+4.   ==>
+mysql> SELECT department_id, MIN(salary) AS min_salary
+    -> FROM employee
+    -> GROUP BY department_id
+    -> ORDER BY min_salary ASC;
++---------------+------------+
+| department_id | min_salary |
++---------------+------------+
+|            50 |       2200 |
+|            90 |       2400 |
+|           130 |       2500 |
+|            60 |       2600 |
+|            30 |       2800 |
+|           110 |       2800 |
+|            70 |       2900 |
+|            80 |       3100 |
+|            40 |       4200 |
+|           140 |       6900 |
+|           160 |       7700 |
+|           150 |       7800 |
+|           170 |       8200 |
+|           100 |      12000 |
+|            20 |      17000 |
++---------------+------------+
+15 rows in set (0.00 sec)
+
+5.   ==>mysql> select department_id,sum(salary) as total_salary from employee group by department_id having sum(salary)>800000 order by total_salary desc;
+Empty set (0.00 sec)
+
+
+
+6.  ==>mysql> SELECT first_name, last_name, job_id, salary
+    -> FROM employee
+    -> WHERE first_name LIKE 'S%';
++------------+-----------+----------+--------+
+| first_name | last_name | job_id   | salary |
++------------+-----------+----------+--------+
+| Steven     | King      | AD_PRES  |  24000 |
+| Shelli     | Baida     | PU_CLERK |   2900 |
+| Sigal      | Tobias    | PU_CLERK |   2800 |
+| Shanta     | Vollman   | ST_MAN   |   6500 |
+| Steven     | Markle    | ST_CLERK |   2200 |
++------------+-----------+----------+--------+
+5 rows in set (0.00 sec)
+
+
+7. ==>mysql> SELECT *
+    -> FROM employee
+    -> WHERE salary = (
+    ->     SELECT MAX(salary)
+    ->     FROM employee
+    -> );
++-------------+------------+-----------+-------+--------------+------------+---------+--------+----------------+------------+---------------+
+| employee_id | first_name | last_name | email | phone_number | hire_date  | job_id  | salary | commission_pct | manager_id | department_id |
++-------------+------------+-----------+-------+--------------+------------+---------+--------+----------------+------------+---------------+
+|         100 | Steven     | King      | SKING | 515.123.4567 | 1987-06-17 | AD_PRES |  24000 |           NULL |       NULL |            20 |
++-------------+------------+-----------+-------+--------------+------------+---------+--------+----------------+------------+---------------+
+1 row in set (0.00 sec)
+
+
+8.  ==>
+mysql> SELECT *
+    -> FROM employee
+    -> WHERE salary = (
+    ->     SELECT MAX(salary)
+    ->     FROM employee
+    ->     WHERE salary < (
+    ->         SELECT MAX(salary)
+    ->         FROM employee
+    ->     )
+    -> );
++-------------+------------+-----------+----------+--------------+------------+--------+--------+----------------+------------+---------------+
+| employee_id | first_name | last_name | email    | phone_number | hire_date  | job_id | salary | commission_pct | manager_id | department_id |
++-------------+------------+-----------+----------+--------------+------------+--------+--------+----------------+------------+---------------+
+|         101 | Neena      | Kochhar   | NKOCHHAR | 515.123.4568 | 1989-11-21 | AD_VP  |  17000 |           NULL |        100 |            20 |
+|         102 | Lex        | De Haan   | LDEHAAN  | 515.123.4569 | 1993-09-12 | AD_VP  |  17000 |           NULL |        100 |            30 |
++-------------+------------+-----------+----------+--------------+------------+--------+--------+----------------+------------+---------------+
+2 rows in set (0.03 sec)
+
+
+9.  ==>mysql> SELECT YEAR(hire_date) AS hire_year, COUNT(*) AS hire_count
+    -> FROM employee
+    -> GROUP BY hire_year
+    -> ORDER BY hire_year;
++-----------+------------+
+| hire_year | hire_count |
++-----------+------------+
+|      1987 |          1 |
+|      1989 |          1 |
+|      1990 |          1 |
+|      1991 |          1 |
+|      1993 |          1 |
+|      1994 |          3 |
+|      1995 |          2 |
+|      1996 |          1 |
+|      1997 |         10 |
+|      1998 |          4 |
+|      1999 |          5 |
+|      2000 |          1 |
++-----------+------------+
+12 rows in set (0.00 sec)
+
+
+10.  ==>mysql> SELECT *
+    -> FROM employee
+    -> WHERE first_name LIKE '%an%';
++-------------+-------------+-----------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+| employee_id | first_name  | last_name | email    | phone_number | hire_date  | job_id     | salary | commission_pct | manager_id | department_id |
++-------------+-------------+-----------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+|         103 | Alexander   | Hunold    | AHUNOLD  | 590.423.4567 | 1990-09-30 | IT_PROG    |   9000 |           NULL |        102 |            60 |
+|         107 | Diana       | Lorentz   | DLORENTZ | 590.423.5567 | 1999-02-09 | IT_PROG    |   4200 |           NULL |        103 |            40 |
+|         108 | Nancy       | Greenberg | NGREENBE | 515.124.4569 | 1994-08-17 | FI_MGR     |  12000 |           NULL |        101 |           100 |
+|         109 | Daniel      | Faviet    | DFAVIET  | 515.124.4169 | 1994-08-12 | FI_ACCOUNT |   9000 |           NULL |        108 |           170 |
+|         112 | Jose Manuel | Urman     | JMURMAN  | 515.124.4469 | 1998-06-03 | FI_ACCOUNT |   7800 |           NULL |        108 |           150 |
+|         115 | Alexander   | Khoo      | AKHOO    | 515.127.4562 | 1995-05-12 | PU_CLERK   |   3100 |           NULL |        114 |            80 |
+|         123 | Shanta      | Vollman   | SVOLLMAN | 650.123.4234 | 1997-10-12 | ST_MAN     |   6500 |           NULL |        100 |            50 |
++-------------+-------------+-----------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+7 rows in set (0.00 sec)
+
+
+11.  ==>mysql> SELECT *
+    -> FROM employee
+    -> WHERE YEAR(hire_date) = 1994
+    -> AND MONTH(hire_date) = 8;
++-------------+------------+-----------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+| employee_id | first_name | last_name | email    | phone_number | hire_date  | job_id     | salary | commission_pct | manager_id | department_id |
++-------------+------------+-----------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+|         108 | Nancy      | Greenberg | NGREENBE | 515.124.4569 | 1994-08-17 | FI_MGR     |  12000 |           NULL |        101 |           100 |
+|         109 | Daniel     | Faviet    | DFAVIET  | 515.124.4169 | 1994-08-12 | FI_ACCOUNT |   9000 |           NULL |        108 |           170 |
++-------------+------------+-----------+----------+--------------+------------+------------+--------+----------------+------------+---------------+
+2 rows in set (0.02 sec)
+
+
+
+12. ==>mysql> SELECT *
+    -> FROM employee
+    -> ORDER BY salary ASC
+    -> LIMIT 5;
++-------------+------------+-------------+----------+--------------+------------+----------+--------+----------------+------------+---------------+
+| employee_id | first_name | last_name   | email    | phone_number | hire_date  | job_id   | salary | commission_pct | manager_id | department_id |
++-------------+------------+-------------+----------+--------------+------------+----------+--------+----------------+------------+---------------+
+|         128 | Steven     | Markle      | SMARKLE  | 650.124.1434 | 2000-03-04 | ST_CLERK |   2200 |           NULL |        120 |            50 |
+|         127 | James      | Landry      | JLANDRY  | 650.124.1334 | 1999-01-02 | ST_CLERK |   2400 |           NULL |        120 |            90 |
+|         119 | Karen      | Colmenares  | KCOLMENA | 515.127.4566 | 1999-04-08 | PU_CLERK |   2500 |           NULL |        114 |           130 |
+|         118 | Guy        | Himuro      | GHIMURO  | 515.127.4565 | 1998-01-02 | PU_CLERK |   2600 |           NULL |        114 |            60 |
+|         126 | Irene      | Mikkilineni | IMIKKILI | 650.124.1224 | 1998-11-12 | ST_CLERK |   2700 |           NULL |        120 |            50 |
++-------------+------------+-------------+----------+--------------+------------+----------+--------+----------------+------------+---------------+
+5 rows in set (0.00 sec)
+
+13. ==>  mysql>  SELECT *
+    -> FROM employee
+    -> WHERE YEAR(hire_date) BETWEEN 1980 AND 1989;
++-------------+------------+-----------+----------+--------------+------------+---------+--------+----------------+------------+---------------+
+| employee_id | first_name | last_name | email    | phone_number | hire_date  | job_id  | salary | commission_pct | manager_id | department_id |
++-------------+------------+-----------+----------+--------------+------------+---------+--------+----------------+------------+---------------+
+|         100 | Steven     | King      | SKING    | 515.123.4567 | 1987-06-17 | AD_PRES |  24000 |           NULL |       NULL |            20 |
+|         101 | Neena      | Kochhar   | NKOCHHAR | 515.123.4568 | 1989-11-21 | AD_VP   |  17000 |           NULL |        100 |            20 |
++-------------+------------+-----------+----------+--------------+------------+---------+--------+----------------+------------+---------------+
+2 rows in set (0.01 sec)
+
+
+14.   ==>mysql> SELECT *
+    -> FROM employee
+    -> WHERE DAY(hire_date) > 15;
++-------------+------------+-----------+----------+--------------+------------+---------+--------+----------------+------------+---------------+
+| employee_id | first_name | last_name | email    | phone_number | hire_date  | job_id  | salary | commission_pct | manager_id | department_id |
++-------------+------------+-----------+----------+--------------+------------+---------+--------+----------------+------------+---------------+
+|         100 | Steven     | King      | SKING    | 515.123.4567 | 1987-06-17 | AD_PRES |  24000 |           NULL |       NULL |            20 |
+|         101 | Neena      | Kochhar   | NKOCHHAR | 515.123.4568 | 1989-11-21 | AD_VP   |  17000 |           NULL |        100 |            20 |
+|         103 | Alexander  | Hunold    | AHUNOLD  | 590.423.4567 | 1990-09-30 | IT_PROG |   9000 |           NULL |        102 |            60 |
+|         104 | Bruce      | Ernst     | BERNST   | 590.423.4568 | 1991-05-21 | IT_PROG |   6000 |           NULL |        103 |            60 |
+|         105 | David      | Austin    | DAUSTIN  | 590.423.4569 | 1997-06-25 | IT_PROG |   4800 |           NULL |        103 |            60 |
+|         108 | Nancy      | Greenberg | NGREENBE | 515.124.4569 | 1994-08-17 | FI_MGR  |  12000 |           NULL |        101 |           100 |
+|         120 | Matthew    | Weiss     | MWEISS   | 650.123.1234 | 1996-07-18 | ST_MAN  |   8000 |           NULL |        100 |            50 |
++-------------+------------+-----------+----------+--------------+------------+---------+--------+----------------+------------+---------------+
+7 rows in set (0.02 sec)
+
+
+15. ==>mysql> SELECT COUNT(*) AS employees_without_commission
+    -> FROM employee
+    -> WHERE commission_pct IS NULL;
++------------------------------+
+| employees_without_commission |
++------------------------------+
+|                           31 |
++------------------------------+
+1 row in set (0.02 sec)
+
+
+16. ==>mysql> SELECT SUM(salary + IFNULL(commission_pct, 0)) AS total_salary_inclusive
+    -> FROM employee;
++------------------------+
+| total_salary_inclusive |
++------------------------+
+|                 216300 |
++------------------------+
+
